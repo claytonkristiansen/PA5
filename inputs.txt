@@ -1,0 +1,102 @@
+./client -n 15000 -p 5 -h 5 -w 10 -b 1024
+./client -n 15000 -p 5 -h 5 -w 20 -b 1024
+./client -n 15000 -p 5 -h 5 -w 30 -b 1024
+./client -n 15000 -p 5 -h 5 -w 40 -b 1024
+./client -n 15000 -p 5 -h 5 -w 50 -b 1024
+./client -n 15000 -p 5 -h 5 -w 60 -b 1024
+./client -n 15000 -p 5 -h 5 -w 70 -b 1024
+./client -n 15000 -p 5 -h 5 -w 80 -b 1024
+./client -n 15000 -p 5 -h 5 -w 90 -b 1024
+./client -n 15000 -p 5 -h 5 -w 100 -b 1024
+./client -n 15000 -p 5 -h 5 -w 110 -b 1024
+./client -n 15000 -p 5 -h 5 -w 120 -b 1024
+./client -n 15000 -p 5 -h 5 -w 130 -b 1024
+./client -n 15000 -p 5 -h 5 -w 140 -b 1024
+./client -n 15000 -p 5 -h 5 -w 150 -b 1024
+./client -n 15000 -p 5 -h 5 -w 160 -b 1024
+./client -n 15000 -p 5 -h 5 -w 170 -b 1024
+./client -n 15000 -p 5 -h 5 -w 180 -b 1024
+./client -n 15000 -p 5 -h 5 -w 190 -b 1024
+./client -n 15000 -p 5 -h 5 -w 200 -b 1024
+./client -n 15000 -p 5 -h 5 -w 300 -b 1024
+./client -n 15000 -p 5 -h 5 -w 400 -b 1024
+./client -n 15000 -p 5 -h 5 -w 500 -b 1024
+./client -n 15000 -p 5 -h 5 -w 600 -b 1024
+./client -n 15000 -p 5 -h 5 -w 700 -b 1024
+./client -n 15000 -p 5 -h 5 -w 800 -b 1024
+./client -n 15000 -p 5 -h 5 -w 900 -b 1024
+./client -n 15000 -p 5 -h 5 -w 1000 -b 1024
+
+./client -n 15000 -p 5 -h 5 -w 100 -b 16
+./client -n 15000 -p 5 -h 5 -w 100 -b 32
+./client -n 15000 -p 5 -h 5 -w 100 -b 48
+./client -n 15000 -p 5 -h 5 -w 100 -b 64
+./client -n 15000 -p 5 -h 5 -w 100 -b 80
+./client -n 15000 -p 5 -h 5 -w 100 -b 96
+./client -n 15000 -p 5 -h 5 -w 100 -b 112
+./client -n 15000 -p 5 -h 5 -w 100 -b 128
+./client -n 15000 -p 5 -h 5 -w 100 -b 256
+./client -n 15000 -p 5 -h 5 -w 100 -b 384
+./client -n 15000 -p 5 -h 5 -w 100 -b 512
+./client -n 15000 -p 5 -h 5 -w 100 -b 640
+./client -n 15000 -p 5 -h 5 -w 100 -b 768
+./client -n 15000 -p 5 -h 5 -w 100 -b 896
+./client -n 15000 -p 5 -h 5 -w 100 -b 1024
+./client -n 15000 -p 5 -h 5 -w 100 -b 2048
+./client -n 15000 -p 5 -h 5 -w 100 -b 3072
+./client -n 15000 -p 5 -h 5 -w 100 -b 4096
+./client -n 15000 -p 5 -h 5 -w 100 -b 5120
+./client -n 15000 -p 5 -h 5 -w 100 -b 6144
+./client -n 15000 -p 5 -h 5 -w 100 -b 7168
+./client -n 15000 -p 5 -h 5 -w 100 -b 8192
+./client -n 15000 -p 5 -h 5 -w 100 -b 9216
+./client -n 15000 -p 5 -h 5 -w 100 -b 10240
+
+./client -f Lecture_set_07.pdf -b 256 -w 100 -m 16
+./client -f Lecture_set_07.pdf -b 256 -w 100 -m 32
+./client -f Lecture_set_07.pdf -b 256 -w 100 -m 48
+./client -f Lecture_set_07.pdf -b 256 -w 100 -m 64
+./client -f Lecture_set_07.pdf -b 256 -w 100 -m 80
+./client -f Lecture_set_07.pdf -b 256 -w 100 -m 96
+./client -f Lecture_set_07.pdf -b 256 -w 100 -m 112
+./client -f Lecture_set_07.pdf -b 256 -w 100 -m 128
+./client -f Lecture_set_07.pdf -b 256 -w 100 -m 144
+./client -f Lecture_set_07.pdf -b 256 -w 100 -m 160
+./client -f Lecture_set_07.pdf -b 256 -w 100 -m 176
+./client -f Lecture_set_07.pdf -b 256 -w 100 -m 192
+./client -f Lecture_set_07.pdf -b 256 -w 100 -m 208
+./client -f Lecture_set_07.pdf -b 256 -w 100 -m 224
+./client -f Lecture_set_07.pdf -b 256 -w 100 -m 240
+./client -f Lecture_set_07.pdf -b 256 -w 100 -m 256
+./client -f Lecture_set_07.pdf -b 256 -w 100 -m 512
+./client -f Lecture_set_07.pdf -b 256 -w 100 -m 1028
+
+./client -f Lecture_set_07.pdf -b 256 -w 1 -m 1028
+./client -f Lecture_set_07.pdf -b 256 -w 2 -m 1028
+./client -f Lecture_set_07.pdf -b 256 -w 3 -m 1028
+./client -f Lecture_set_07.pdf -b 256 -w 4 -m 1028
+./client -f Lecture_set_07.pdf -b 256 -w 5 -m 1028
+./client -f Lecture_set_07.pdf -b 256 -w 6 -m 1028
+./client -f Lecture_set_07.pdf -b 256 -w 7 -m 1028
+./client -f Lecture_set_07.pdf -b 256 -w 8 -m 1028
+./client -f Lecture_set_07.pdf -b 256 -w 9 -m 1028
+./client -f Lecture_set_07.pdf -b 256 -w 10 -m 1028
+./client -f Lecture_set_07.pdf -b 256 -w 20 -m 1028
+./client -f Lecture_set_07.pdf -b 256 -w 30 -m 1028
+./client -f Lecture_set_07.pdf -b 256 -w 40 -m 1028
+./client -f Lecture_set_07.pdf -b 256 -w 50 -m 1028
+./client -f Lecture_set_07.pdf -b 256 -w 60 -m 1028
+./client -f Lecture_set_07.pdf -b 256 -w 70 -m 1028
+./client -f Lecture_set_07.pdf -b 256 -w 80 -m 1028
+./client -f Lecture_set_07.pdf -b 256 -w 90 -m 1028
+./client -f Lecture_set_07.pdf -b 256 -w 100 -m 1028
+./client -f Lecture_set_07.pdf -b 256 -w 110 -m 1028
+./client -f Lecture_set_07.pdf -b 256 -w 120 -m 1028
+./client -f Lecture_set_07.pdf -b 256 -w 130 -m 1028
+./client -f Lecture_set_07.pdf -b 256 -w 140 -m 1028
+./client -f Lecture_set_07.pdf -b 256 -w 150 -m 1028
+./client -f Lecture_set_07.pdf -b 256 -w 160 -m 1028
+./client -f Lecture_set_07.pdf -b 256 -w 170 -m 1028
+./client -f Lecture_set_07.pdf -b 256 -w 180 -m 1028
+./client -f Lecture_set_07.pdf -b 256 -w 190 -m 1028
+./client -f Lecture_set_07.pdf -b 256 -w 200 -m 1028
