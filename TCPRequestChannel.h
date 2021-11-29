@@ -1,4 +1,15 @@
 #include <string>
+#include <stdio.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netdb.h>
+#include <string.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <iostream>
+#include <thread>
+#include "common.h"
+using namespace std;
 
 
 class TCPRequestChannel{
@@ -15,7 +26,7 @@ public:
      sockfd  in the respective way so that it can works as a    server or client communication endpoint*/
    TCPRequestChannel (const std::string host_name, const std::string port_no);
 /* This is used by the server to create a channel out of a newly accepted client socket. Note that an accepted client socket is ready for communication */
-   TCPRequestChannel (int);
+   TCPRequestChannel (int socket);
    /* destructor */
    ~TCPRequestChannel();
    int cread (void* msgbuf, int buflen);

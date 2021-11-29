@@ -1,5 +1,5 @@
 #include "common.h"
-#include "FIFOreqchannel.h"
+#include "TCPRequestChannel.h"
 #include "BoundedBuffer.h"
 #include "HistogramCollection.h"
 #include <sys/wait.h>
@@ -105,7 +105,7 @@ void patient_thread_function(THING_REQUEST_TYPE rqType, BoundedBuffer *requestBu
 	}
 }
 
-void worker_thread_function(THING_REQUEST_TYPE rqType, FIFORequestChannel *chan, Semaphore *fileMutex, BoundedBuffer *requestBuffer, BoundedBuffer *responseBuffer, std::ofstream *fout, int bufferCapacity)
+void worker_thread_function(THING_REQUEST_TYPE rqType, TCPRequestChannel *chan, Semaphore *fileMutex, BoundedBuffer *requestBuffer, BoundedBuffer *responseBuffer, std::ofstream *fout, int bufferCapacity)
 {
 	// Request q(QUIT_REQ_TYPE);
 	// chan->cwrite(&q, sizeof(Request));
@@ -224,12 +224,17 @@ int main(int argc, char *argv[])
 
 	int n = 1000;
 	int w = 50;
-	int h = 5;
+	int histogramThreadCount = 10;
 	int m = 256;
+
+    std::string r = "25565";
+	std::string h = "myserver";
+
+
 	THING_REQUEST_TYPE reqType = DATA_REQUEST_TYPE;
 	Semaphore fileMutex(1);
 
-	while ((opt = getopt(argc, argv, "f:n:p:w:b:h:m:")) != -1)
+	while ((opt = getopt(argc, argv, "f:n:p:w:b:h:m:r:")) != -1)
 	{
 		switch (opt)
 		{
@@ -250,39 +255,42 @@ int main(int argc, char *argv[])
 			b = stoi(optarg);
 			break;
 		case 'h':
-			h = stoi(optarg);
+			h = std::string(optarg);
 			break;
 		case 'm':
 			m = stoi(optarg);
 			break;
+		case 'r':
+			r = std::string(optarg);
+			break;
 		}
 	}
 
-	int pid = fork();
-	if (pid < 0)
-	{
-		EXITONERROR("Could not create a child process for running the server");
-	}
-	if (!pid)
-	{ // The server runs in the child process
-		std::string mString = to_string(m);
-		char mStr[mString.length() + 1];
-		strcpy(mStr, mString.c_str());
-		char *args[] = {"./server", "-m", mStr, nullptr};
-		if (execvp(args[0], args) < 0)
-		{
-			EXITONERROR("Could not launch the server");
-		}
-		return 0;
-	}
-	FIFORequestChannel chan("control", FIFORequestChannel::CLIENT_SIDE);
+	// int pid = fork();
+	// if (pid < 0)
+	// {
+	// 	EXITONERROR("Could not create a child process for running the server");
+	// }
+	// if (!pid)
+	// { // The server runs in the child process
+	// 	std::string mString = to_string(m);
+	// 	char mStr[mString.length() + 1];
+	// 	strcpy(mStr, mString.c_str());
+	// 	char *args[] = {"./server", "-m", mStr, nullptr};
+	// 	if (execvp(args[0], args) < 0)
+	// 	{
+	// 		EXITONERROR("Could not launch the server");
+	// 	}
+	// 	return 0;
+	// }
+	TCPRequestChannel chan(h, r);
 	BoundedBuffer request_buffer(b);
 	BoundedBuffer response_buffer(b);
 
 	struct timeval start, end;
 	gettimeofday(&start, 0);
 
-	vector<FIFORequestChannel*> channels;
+	vector<TCPRequestChannel*> channels;
 
 	/* Start all threads here */
 	vector<std::thread*> patientThreads;
@@ -297,11 +305,11 @@ int main(int argc, char *argv[])
 
 	for(int i = 0; i < w; ++i)
 	{
-		Request nc (NEWCHAN_REQ_TYPE);
-		chan.cwrite (&nc, sizeof(nc));
-		char nameBuf[b];
-		chan.cread(nameBuf, b);
-		FIFORequestChannel *newChan = new FIFORequestChannel(string(nameBuf), FIFORequestChannel::CLIENT_SIDE);		//Request new channel
+		// Request nc (NEWCHAN_REQ_TYPE);
+		// chan.cwrite (&nc, sizeof(nc));
+		// char nameBuf[b];
+		// chan.cread(nameBuf, b);
+		TCPRequestChannel *newChan = new TCPRequestChannel(h, r);		//Request new channel
 		channels.push_back(newChan);
 		std::thread *workerThread = new std::thread(worker_thread_function, reqType, newChan, &fileMutex, &request_buffer, &response_buffer, fout, m);
 		workerThreads.push_back(workerThread);
@@ -317,10 +325,10 @@ int main(int argc, char *argv[])
 				std::thread *patientThread = new std::thread(patient_thread_function, reqType, &request_buffer, i, n, filename);
 				patientThreads.push_back(patientThread);
 
-				Histogram *h = new Histogram(10, -2, 2);
-				hc.add(h);
+				Histogram *hist = new Histogram(10, -2, 2);
+				hc.add(hist);
 			}	
-			for(int i = 0; i < h; ++i)			//Create Histogram threads
+			for(int i = 0; i < histogramThreadCount; ++i)			//Create Histogram threads
 			{
 				std::thread *histogramThread = new std::thread(histogram_thread_function, &hc, &response_buffer);
 				histogramThreads.push_back(histogramThread);
@@ -341,7 +349,7 @@ int main(int argc, char *argv[])
 			{
 				t->join();
 			}
-			for(int i = 0; i < h; ++i)
+			for(int i = 0; i < histogramThreadCount; ++i)
 			{
 				Response r(true);
 				char buf[sizeof(Response)];
@@ -384,7 +392,7 @@ int main(int argc, char *argv[])
 	
 	//Taking care of memory business
 	delete fout;
-	for(FIFORequestChannel *chanP : channels)
+	for(TCPRequestChannel *chanP : channels)
 	{
 		delete chanP;
 	}
