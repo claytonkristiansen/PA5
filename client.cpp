@@ -379,6 +379,7 @@ int main(int argc, char *argv[])
 	gettimeofday(&end, 0);
 
 	// print the results and time difference
+	system("clear");
 	hc.print();
 	int secs = (end.tv_sec * 1e6 + end.tv_usec - start.tv_sec * 1e6 - start.tv_usec) / (int)1e6;
 	int usecs = (int)(end.tv_sec * 1e6 + end.tv_usec - start.tv_sec * 1e6 - start.tv_usec) % ((int)1e6);
