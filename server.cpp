@@ -189,7 +189,9 @@ void handle_process_loop(TCPRequestChannel *channel)
 	}
 	while (true)
 	{
+		std::cout << "About to read\n";
 		int nbytes = channel->cread(buffer, buffercapacity);
+		std::cout << "Read " << nbytes << " bytes\n";
 		if (nbytes < 0)
 		{
 			cerr << "Client-side terminated abnormally" << endl;

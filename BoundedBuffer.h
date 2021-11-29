@@ -38,6 +38,7 @@ public:
 		q.push(data);
 		mutex.V();
 		fullSlots.V();
+		std::cout << "PUSH\n";
 	}
 
 	vector<char> pop()
