@@ -94,7 +94,8 @@ void process_file_request(TCPRequestChannel *rc, Request *request)
 	{
 		cerr << "Server received request for file: " << filename << " which cannot be opened" << endl;
 		Request r(UNKNOWN_REQ_TYPE);
-		rc->cwrite(&r, sizeof(r));
+		int numBytesWrote = rc->cwrite(&r, sizeof(r));
+		std::cout << "Wrote " << numBytesWrote << " bytes to sockfd " << rc->getfd() << "\n";
 		return;
 	}
 
@@ -191,7 +192,7 @@ void handle_process_loop(TCPRequestChannel *channel)
 	{
 		//std::cout << "About to read from sockfd " << channel->getfd() << "\n";
 		int nbytes = channel->cread(buffer, buffercapacity);
-		std::cout << "Read " << nbytes << " bytes from sockfd " << channel->getfd() << "\n";
+		//std::cout << "Read " << nbytes << " bytes from sockfd " << channel->getfd() << "\n";
 		if (nbytes < 0)
 		{
 			cerr << "Client-side terminated abnormally" << endl;
