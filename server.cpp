@@ -295,7 +295,7 @@ int main(int argc, char *argv[])
 	//handle_process_loop(control_channel);
 	for (int i = 0; i < channel_threads.size(); i++)
 	{
-		//std::cout << i << "\n";
+		std::cout << i << "\n";
 		channel_threads[i]->join();
 	}
 	cout << "Server process exited" << endl;
