@@ -31,7 +31,6 @@ TCPRequestChannel::TCPRequestChannel(const std::string host_name, const std::str
     if(host_name != "")
     {
         struct addrinfo hints, *res;
-        int sockfd;
 
         // first, load up address structs with getaddrinfo():
         memset(&hints, 0, sizeof hints);
@@ -60,7 +59,7 @@ TCPRequestChannel::TCPRequestChannel(const std::string host_name, const std::str
     }
     else
     {
-       	int sockfd, new_fd;  // listen on sock_fd, new connection on new_fd
+       	int new_fd;  // listen on sock_fd, new connection on new_fd
         struct addrinfo hints, *serv;
         struct sockaddr_storage their_addr; // connector's address information
         socklen_t sin_size;
