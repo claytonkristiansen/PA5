@@ -315,6 +315,8 @@ int main(int argc, char *argv[])
 		workerThreads.push_back(workerThread);
 	}
 
+	cout << "got past initial creations\n";
+
 	switch(reqType)
 	{
 		case DATA_REQUEST_TYPE:

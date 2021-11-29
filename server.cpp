@@ -24,7 +24,7 @@ pthread_mutex_t newchannel_lock;
 void handle_process_loop(TCPRequestChannel *_channel);
 char ival;
 vector<string> all_data[NUM_PERSONS];
-vector<thread> channel_threads;
+vector<thread*> channel_threads;
 
 // void process_newchannel_request (FIFORequestChannel *_channel){
 // 	nchannels++;
@@ -284,16 +284,17 @@ int main(int argc, char *argv[])
 			continue;
 		}
 		TCPRequestChannel *control_channel = new TCPRequestChannel(client_socket);
-		channel_threads.push_back(thread(handle_process_loop, control_channel));
+		thread *T = new thread(handle_process_loop, control_channel);
+		channel_threads.push_back(T);
 
-		// t.detach ();
+		T->detach();
 	}
 
 	//handle_process_loop(control_channel);
 	for (int i = 0; i < channel_threads.size(); i++)
 	{
 		//std::cout << i << "\n";
-		channel_threads[i].join();
+		channel_threads[i]->join();
 	}
 	cout << "Server process exited" << endl;
 }
