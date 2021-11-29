@@ -94,8 +94,7 @@ void process_file_request(TCPRequestChannel *rc, Request *request)
 	{
 		cerr << "Server received request for file: " << filename << " which cannot be opened" << endl;
 		Request r(UNKNOWN_REQ_TYPE);
-		int numBytesWrote = rc->cwrite(&r, sizeof(r));
-		std::cout << "Wrote " << numBytesWrote << " bytes to sockfd " << rc->getfd() << "\n";
+		rc->cwrite(&r, sizeof(r));
 		return;
 	}
 
@@ -116,7 +115,8 @@ void process_file_request(TCPRequestChannel *rc, Request *request)
 	{
 		cerr << "Client is requesting a chunk bigger than server's capacity" << endl;
 		Request r(UNKNOWN_REQ_TYPE);
-		rc->cwrite(&r, sizeof(r));
+		int numBytesWrote = rc->cwrite(&r, sizeof(r));
+		std::cout << "Wrote " << numBytesWrote << " bytes to sockfd " << rc->getfd() << "\n";
 		return;
 	}
 
