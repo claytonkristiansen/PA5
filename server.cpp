@@ -206,7 +206,9 @@ void handle_process_loop(TCPRequestChannel *channel)
 		Request *r = (Request *)buffer;
 		if (r->getType() == QUIT_REQ_TYPE)
 		{
-			cout << "Connection with " << channel->getfd() << " closed by client" << endl;
+			//cout << "Connection with " << channel->getfd() << " closed by client" << endl;
+            system("clear");
+            cout << --nchannels << " connections\n";
 			break;
 			// note that QUIT_MSG does not get a reply from the server
 		}
@@ -290,7 +292,9 @@ int main(int argc, char *argv[])
 		thread *T = new thread(handle_process_loop, control_channel);
 		channel_threads.push_back(T);
 		T->detach();
-		cout << "Connection with " << control_channel->getfd() << " opened by client" << endl;
+		//cout << "Connection with " << control_channel->getfd() << " opened by client" << endl;
+        system("clear");
+        cout << ++nchannels << " connections\n";
 	}
 
 	//handle_process_loop(control_channel);
