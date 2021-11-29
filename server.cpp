@@ -115,8 +115,7 @@ void process_file_request(TCPRequestChannel *rc, Request *request)
 	{
 		cerr << "Client is requesting a chunk bigger than server's capacity" << endl;
 		Request r(UNKNOWN_REQ_TYPE);
-		int numBytesWrote = rc->cwrite(&r, sizeof(r));
-		std::cout << "Wrote " << numBytesWrote << " bytes to sockfd " << rc->getfd() << "\n";
+		rc->cwrite(&r, sizeof(r));
 		return;
 	}
 
@@ -133,7 +132,8 @@ void process_file_request(TCPRequestChannel *rc, Request *request)
 		close(fd);
 		return;
 	}
-	rc->cwrite(response, nbytes);
+	int numBytesWrote = rc->cwrite(response, nbytes);
+	std::cout << "Wrote " << numBytesWrote << " bytes to sockfd " << rc->getfd() << "\n";
 	close(fd);
 }
 
