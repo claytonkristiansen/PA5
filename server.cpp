@@ -290,7 +290,7 @@ int main(int argc, char *argv[])
 		thread *T = new thread(handle_process_loop, control_channel);
 		channel_threads.push_back(T);
 		T->detach();
-		cout << "Connection with " << sockfd << " opened by client" << endl;
+		cout << "Connection with " << control_channel->getfd() << " opened by client" << endl;
 	}
 
 	//handle_process_loop(control_channel);
