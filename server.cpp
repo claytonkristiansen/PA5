@@ -133,7 +133,7 @@ void process_file_request(TCPRequestChannel *rc, Request *request)
 		return;
 	}
 	int numBytesWrote = rc->cwrite(response, nbytes);
-	std::cout << "Wrote " << numBytesWrote << " bytes to sockfd " << rc->getfd() << "\n";
+	//std::cout << "Wrote " << numBytesWrote << " bytes to sockfd " << rc->getfd() << "\n";
 	close(fd);
 }
 
@@ -289,8 +289,8 @@ int main(int argc, char *argv[])
 		TCPRequestChannel *control_channel = new TCPRequestChannel(client_socket);
 		thread *T = new thread(handle_process_loop, control_channel);
 		channel_threads.push_back(T);
-
 		T->detach();
+		cout << "Connection with " << sockfd << " opened by client" << endl;
 	}
 
 	//handle_process_loop(control_channel);

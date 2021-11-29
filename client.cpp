@@ -13,6 +13,7 @@ HistogramCollection hc;
 bool programDone;
 mutex mut;
 int total = 0;
+int totalWritten = 0;
 
 struct Response
 {
@@ -95,9 +96,6 @@ void patient_thread_function(THING_REQUEST_TYPE rqType, BoundedBuffer *requestBu
 				DataRequest dataRequest(patient, 0.004 * i, 1);
 				std::memcpy(buf, &dataRequest, sizeof(DataRequest));
 				requestBuffer->push(CharArrToVecOfChar(buf, sizeof(DataRequest)));
-				// dataRequest = DataRequest(patient, 0.004 * i, 2);
-				// std::memcpy(buf, &dataRequest, sizeof(DataRequest));
-				// requestBuffer->push(CharArrToVecOfChar(buf, sizeof(DataRequest)));
 			}
 			break;
 		case FILE_REQUEST_TYPE:
@@ -108,8 +106,6 @@ void patient_thread_function(THING_REQUEST_TYPE rqType, BoundedBuffer *requestBu
 
 void worker_thread_function(THING_REQUEST_TYPE rqType, TCPRequestChannel *chan, Semaphore *fileMutex, BoundedBuffer *requestBuffer, BoundedBuffer *responseBuffer, std::ofstream *fout, int bufferCapacity)
 {
-	// Request q(QUIT_REQ_TYPE);
-	// chan->cwrite(&q, sizeof(Request));
 	if(rqType == DATA_REQUEST_TYPE)
 	{
 		bool done = false;
@@ -132,10 +128,7 @@ void worker_thread_function(THING_REQUEST_TYPE rqType, TCPRequestChannel *chan, 
 			chan->cwrite (&dataReq, sizeof(DataRequest)); //question
 			double reply;
 			chan->cread (&reply, sizeof(double)); //answer
-			// cout << "s\n";
 			responseBuffer->push(ResponseToVecOfChar(Response(patient, reply)));
-			// cout << "f\n";
-			//cout << patient << ": " << reply << "\n";
 			delete[] reqBuf;
 		}
 	}
@@ -163,21 +156,18 @@ void worker_thread_function(THING_REQUEST_TYPE rqType, TCPRequestChannel *chan, 
 			fileMutex->P();
 			fout->seekp(fileReq.offset);
 			fout->write(buf4, fileReq.length);		//Write data to file
+			totalWritten += fileReq.length;
 			fileMutex->V();
 			delete[] reqBuf;
 		}
-		fout->close();
 	}
-	// cout << "WORKER THREAD STOPPED\n";
 }
 void histogram_thread_function(HistogramCollection *histogramCollection, BoundedBuffer *responseBuffer)
 {
 	bool done = false;
 	while(!done)
 	{
-		// cout << "s\n";
 		vector<char> responseVec = responseBuffer->pop();
-		// cout << "f\n";
 		Response response = VecOfCharToResponse(responseVec);
 		if(response.m_kill)	//break
 		{
@@ -185,13 +175,11 @@ void histogram_thread_function(HistogramCollection *histogramCollection, Bounded
 		}
 		histogramCollection->update(response.m_patient, response.m_ecg);
 	}
-	// cout << "HISTOGRAM THREAD STOPPED\n";
 }
 
-void file_request_thread_function(BoundedBuffer* requestBuffer, int fileLen, string fileName, int bufferCapacity)
+void file_request_thread_function(BoundedBuffer* requestBuffer, int fileLen, string fileName, ofstream *fout, int bufferCapacity)
 {
 	std::cout << "File length is: " << fileLen << " bytes" << endl;
-	ofstream file2("received/" + fileName);
 	int len = sizeof (FileRequest) + fileName.size()+1;
 	for(int byteOffset = 0; byteOffset < fileLen; byteOffset += bufferCapacity)
 	{
@@ -225,8 +213,7 @@ int main(int argc, char *argv[])
 	int m = 256;
 
     std::string r = "25565";
-	std::string h = "myserver";
-
+	std::string h = "";
 
 	THING_REQUEST_TYPE reqType = DATA_REQUEST_TYPE;
 	Semaphore fileMutex(1);
@@ -263,23 +250,6 @@ int main(int argc, char *argv[])
 		}
 	}
 
-	// int pid = fork();
-	// if (pid < 0)
-	// {
-	// 	EXITONERROR("Could not create a child process for running the server");
-	// }
-	// if (!pid)
-	// { // The server runs in the child process
-	// 	std::string mString = to_string(m);
-	// 	char mStr[mString.length() + 1];
-	// 	strcpy(mStr, mString.c_str());
-	// 	char *args[] = {"./server", "-m", mStr, nullptr};
-	// 	if (execvp(args[0], args) < 0)
-	// 	{
-	// 		EXITONERROR("Could not launch the server");
-	// 	}
-	// 	return 0;
-	// }
 	TCPRequestChannel chan(h, r);
 	BoundedBuffer request_buffer(b);
 	BoundedBuffer response_buffer(b);
@@ -302,17 +272,11 @@ int main(int argc, char *argv[])
 
 	for(int i = 0; i < w; ++i)
 	{
-		// Request nc (NEWCHAN_REQ_TYPE);
-		// chan.cwrite (&nc, sizeof(nc));
-		// char nameBuf[b];
-		// chan.cread(nameBuf, b);
 		TCPRequestChannel *newChan = new TCPRequestChannel(h, r);		//Request new channel
 		channels.push_back(newChan);
 		std::thread *workerThread = new std::thread(worker_thread_function, reqType, newChan, &fileMutex, &request_buffer, &response_buffer, fout, m);
 		workerThreads.push_back(workerThread);
 	}
-
-	cout << "got past initial creations\n";
 
 	switch(reqType)
 	{
@@ -361,6 +325,7 @@ int main(int argc, char *argv[])
 			}
 			break;
 		case FILE_REQUEST_TYPE:
+			ofstream *file2 = new ofstream("received/" + filename);
 			int64 filelen;	
 			FileRequest fm (0,0);
 			int len = sizeof (FileRequest) + filename.size()+1;
@@ -371,7 +336,7 @@ int main(int argc, char *argv[])
 			chan.cread (&filelen, sizeof(int64));
 			if (isValidResponse(&filelen))
 			{
-				std::thread fileReqestThread(file_request_thread_function, &request_buffer, filelen, filename, m);
+				std::thread fileReqestThread(file_request_thread_function, &request_buffer, filelen, filename, file2, m);
 				fileReqestThread.join();
 			}
 			for(int i = 0; i < w; ++i)
@@ -386,6 +351,8 @@ int main(int argc, char *argv[])
 			{
 				t->join();
 			}
+			file2->close();
+			delete file2;
 			break;
 	}
 	
