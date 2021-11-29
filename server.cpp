@@ -189,7 +189,7 @@ void handle_process_loop(TCPRequestChannel *channel)
 	}
 	while (true)
 	{
-		std::cout << "About to read from sockfd " << channel->getfd() << "\n";
+		//std::cout << "About to read from sockfd " << channel->getfd() << "\n";
 		int nbytes = channel->cread(buffer, buffercapacity);
 		std::cout << "Read " << nbytes << " bytes from sockfd " << channel->getfd() << "\n";
 		if (nbytes < 0)
@@ -205,7 +205,7 @@ void handle_process_loop(TCPRequestChannel *channel)
 		Request *r = (Request *)buffer;
 		if (r->getType() == QUIT_REQ_TYPE)
 		{
-			//cout << "Connection with " << channel->name() << " closed by client" << endl;
+			cout << "Connection with " << channel->getfd() << " closed by client" << endl;
 			break;
 			// note that QUIT_MSG does not get a reply from the server
 		}
