@@ -12,6 +12,7 @@ enum THING_REQUEST_TYPE {FILE_REQUEST_TYPE, DATA_REQUEST_TYPE};
 HistogramCollection hc;
 bool programDone;
 mutex mut;
+int total = 0;
 
 struct Response
 {
@@ -155,11 +156,6 @@ void worker_thread_function(THING_REQUEST_TYPE rqType, TCPRequestChannel *chan, 
 			}
 			FileRequest fileReq(0, 0);
 			std::memcpy(&fileReq, reqBuf, sizeof(FileRequest));	//Copy memory into FileRequest object
-			
-			if(fileReq.length == 219)
-			{
-				int k = 0;
-			}
 
 			chan->cwrite(reqBuf, reqBufSize);
 			char buf4[bufferCapacity];
@@ -209,6 +205,7 @@ void file_request_thread_function(BoundedBuffer* requestBuffer, int fileLen, str
 		std::memcpy (buf3, &fq, sizeof (FileRequest));
 		std::strcpy (buf3 + sizeof (FileRequest), fileName.c_str());
 		requestBuffer->push(CharArrToVecOfChar(buf3, len));
+		total += requestAmount;
 	}
 }
 int main(int argc, char *argv[])
