@@ -208,7 +208,7 @@ void handle_process_loop(TCPRequestChannel *channel)
 		{
 			//cout << "Connection with " << channel->getfd() << " closed by client" << endl;
             //system("clear");
-            cout << --nchannels << " connections\n";
+            //cout << --nchannels << " connections\n";
 			break;
 			// note that QUIT_MSG does not get a reply from the server
 		}

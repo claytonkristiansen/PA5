@@ -53,7 +53,7 @@ TCPRequestChannel::TCPRequestChannel(const std::string host_name, const std::str
             perror ("Cannot Connect");
         }
         //
-        cout << "Connected " << endl;
+        //cout << "Connected " << endl;
         // now it is time to free the memory dynamically allocated onto the "res" pointer by the getaddrinfo function
         freeaddrinfo (res);
     }
