@@ -294,7 +294,7 @@ int main(int argc, char *argv[])
 		T->detach();
 		//cout << "Connection with " << control_channel->getfd() << " opened by client" << endl;
         //system("clear");
-        cout << ++nchannels << " connections\n";
+        //cout << ++nchannels << " connections\n";
 	}
 
 	//handle_process_loop(control_channel);
